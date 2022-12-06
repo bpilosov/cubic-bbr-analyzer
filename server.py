@@ -11,3 +11,6 @@ while True:
 
     if result.error:
         print(result.error)
+
+    if result:
+        exit(0)
