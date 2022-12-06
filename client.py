@@ -18,10 +18,10 @@ if __name__ == '__main__':
     result = client.run()
     if result.error:
         print(result.error)
-    f = open("test.json", 'w')
-    f.write(result.text)
-    f.close()
-    # print(result)
+    # f = open("test.json", 'w')
+    # f.write(result.text)
+    # f.close()
+    print(result)
 
     del client
 
@@ -35,9 +35,9 @@ if __name__ == '__main__':
     result = client.run()
     if result.error:
         print(result.error)
-    f0 = open("test0.json", 'w')
-    f0.write(result.text)
-    f0.close()
-    # print(result)
+    # f0 = open("test0.json", 'w')
+    # f0.write(result.text)
+    # f0.close()
+    print(result)
 
 
