@@ -9,8 +9,8 @@ limits = [1000, 2000, 5000, 10000, 500000, 1000000, 2000000, 5000000, 10000000, 
 if __name__ == '__main__':
     client = iperf3.Client()
     client.duration = 1
-    # client.server_hostname = '192.168.100.168'
-    client.server_hostname = '127.0.0.0'
+    client.server_hostname = '192.168.100.168'
+    # client.server_hostname = '127.0.0.0' # for testing local
     client.port = 5201
     client.verbose = True
     client.json_output = True
@@ -27,8 +27,8 @@ if __name__ == '__main__':
 
     client = iperf3.Client()
     client.duration = 1
-    # client.server_hostname = '192.168.100.168'
-    client.server_hostname = '127.0.0.0'
+    client.server_hostname = '192.168.100.168'
+    # client.server_hostname = '127.0.0.0' # for testing local
     client.port = 5201
     client.verbose = True
     client.json_output = True
