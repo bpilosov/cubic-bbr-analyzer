@@ -12,5 +12,6 @@ while True:
     if result.error:
         print(result.error)
 
-    if result:
-        exit(0)
+    # Never exit use kill $(lsof -t -i:5201)
+    # if result:
+    #     exit(0)

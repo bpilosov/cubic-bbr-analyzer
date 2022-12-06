@@ -18,5 +18,6 @@ if __name__ == '__main__':
     client_cmd = "ssh root@f1 'python3 ~/cubic-bbr-analyzer/client.py'"
     client_cmd = shlex.split(client_cmd)
 
-    comp_test = subprocess.run(client_cmd)
-    print(comp_test.stdout)
+    f = open("test.json", 'w')
+    subprocess.run(client_cmd, stdout=f)
+
