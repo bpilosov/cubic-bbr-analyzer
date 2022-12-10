@@ -4,27 +4,31 @@ import threading
 from time import sleep
 import paramiko
 
-bws = [10, 20, 50, 100, 250, 500, 750, 1000]  # 8 bandwidths (Mbps)
-rtts = [5, 10, 25, 50, 75, 100, 150, 200]  # 8 rtts (ms)
-buffers = [100, 1000, 10000, 20000, 50000]  # 5 buffers (KBytes)
 algos = ["cubic", "bbr"]
 ports = [5201, 5202]
 
-"""
+
+bws = [10, 20, 50, 100, 250, 500, 750, 1000]  # 8 bandwidths (Mbps)
+rtts = [5, 10, 25, 50, 75, 100, 150, 200]  # 8 rtts (ms)
+buffers = [100, 1000, 10000, 20000, 50000]  # 5 buffers (KBytes)
+cmd3 = 'iperf3 -c 192.168.100.168 -p {3} -t 60 -C {2} -J -P{0} --logfile {1}'
+""" Test 1
+    8 * 8 * 5 = 320
+    10 seconds/test = 53.3 minutes for full suite
+    60 seconds/test = 320 minutes (5.3 hours) for full suite"""
+
+
+# bws = [10, 100, 1000]  # 3 bandwidths (Mbps)
+# rtts = [5, 50, 200]  # 3 rtts (ms)
+# buffers = [100, 10000, 50000]  # 3 buffers (KBytes)
+# cmd3 = 'iperf3 -c 192.168.100.168 -p {3} -t 60 -C {2} -J -P{0} --logfile {1}'
+''' Test 2
+    3 * 3 * 3 * 60 seconds = 1620 seconds = 27 minutes'''
+
+''' 
     http://ce.sc.edu/cyberinfra/workshops/Material/NTP/Lab%205.pdf 
     page 10: burst = bw/1000. 10mb = 10kb, 1000mb = 1000kb
-    8 * 8 * 5 = 360 seconds total
-    10 seconds/test = 1 hour for full suite
-"""
-
-# commands
-# cmd = "iperf -c192.168.100.168 -t5 -b1g -e -Zbbr -yc -i1 -P2"
-cmd3 = 'iperf3 -c 192.168.100.168 -p {3} -t 10 -C {2} -J -P{0} --logfile {1}'
-
-
-# cmd3bbr = 'iperf3 -c 192.168.100.168 -p 5201 -t 10 -C {2} -J -P{0} --logfile {1}'
-# cmd3cubic = 'iperf3 -c 192.168.100.168 -p 5202 -t 10 -C {2} -J -P{0} --logfile {1}'
-# cmds = [cmd3bbr, cmd3cubic]
+'''
 
 
 def setTC(link, tc_rtt, tc_bw, tc_buffer):
@@ -47,7 +51,7 @@ def runIperf(i_bw, i_rtt, i_buffer, i_algo, i_num_stream, i_port):
     ssh.connect("f1", username="root")
     ftp_client = ssh.open_sftp()
 
-    test_name = "results/bw{0}rtt{1}buffer{2}_{3}.json".format(i_bw, i_rtt, i_buffer, i_algo)
+    test_name = "60sec640tests/bw{0}_rtt{1}_buffer{2}_{3}.json".format(i_bw, i_rtt, i_buffer, i_algo)
     try:
         ftp_client.remove(test_name)  # remove previous results if present
     except IOError:
