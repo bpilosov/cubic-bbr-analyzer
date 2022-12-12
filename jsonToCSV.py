@@ -8,10 +8,10 @@ bws = [10, 20, 50, 100, 250, 500, 750, 1000]  # 8 bandwidths (Mbps)
 rtts = [5, 10, 25, 50, 75, 100, 150, 200]  # 8 rtts (ms)
 buffers = [100, 1000, 10000, 20000, 50000]  # 5 buffers (KBytes)
 algos = ["bbr", "cubic"]
-basestring = "bw{0}rtt{1}buffer{2}_{3}.json"
 
 
 def sortedToDataFrame(folder):
+    basestring = "bw{0}rtt{1}buffer{2}_{3}.json"
     lst = []
     for x in bws:
         for y in rtts:
@@ -66,14 +66,14 @@ def jsonToDataFrame(folder: str) -> pd.DataFrame:
     result.columns = ["bandwidth", "delay", "buffer_size", "algorithm", "bytes_sent", "bytes_received", "loss_rate",
                       "time_elapsed", "goodput", "retransmits", "host_cpu", "remote_cpu"]
     # print(result)
-    # result.to_csv(path_or_buf=folder + ".csv")
+    result.to_csv(path_or_buf=folder + ".csv")
     return result
 
 
 def avgThreeResults(test_name: str):
-    df = pd.read_csv("zips/" + test_name + ".csv")
-    df1 = pd.read_csv("zips/" + test_name + ".csv")
-    df2 = pd.read_csv("zips/" + test_name + ".csv")
+    df = pd.read_csv(test_name + ".csv")
+    df1 = pd.read_csv(test_name + "1.csv")
+    df2 = pd.read_csv(test_name + "2.csv")
     col_algo = df["algorithm"]
 
     lst = [df, df1, df2]
@@ -86,6 +86,8 @@ def avgThreeResults(test_name: str):
     df_means.insert(4, "algorithm", col_algo)
     # print(df_means)
     df_means.to_csv(path_or_buf="means" + ".csv")
+
+    return df_means
 
 
 def analyzeFairness(df: pd.DataFrame, test_name: str):
@@ -118,15 +120,20 @@ def analyzeFairness(df: pd.DataFrame, test_name: str):
     # df_sorted = df.sort_values(by=['bbr_ratio', 'cubic_ratio'], ascending=[False, False])
     bbr_advantage = df.query("bbr_ratio >= 0.6")
     cubic_advantage = df.query("cubic_ratio >= 0.6")
+    neither_advantage = df.query("cubic_ratio < 0.6 | bbr_ratio < 0.6")
     sorted_bbr_advantage = bbr_advantage.sort_values(by=["bbr_ratio"], ascending=False)
     sorted_cubic_advantage = cubic_advantage.sort_values(by=["cubic_ratio"], ascending=False)
-
+    sorted_neither_advantage = neither_advantage.sort_values(by=["bbr_ratio"], ascending=False)
     print(sorted_bbr_advantage)
     print(sorted_cubic_advantage)
     sorted_bbr_advantage.to_csv(path_or_buf="sorted_bbr_advantage" + test_name + ".csv")
     sorted_cubic_advantage.to_csv(path_or_buf="sorted_cubic_advantage" + test_name + ".csv")
+    sorted_neither_advantage.to_csv(path_or_buf="sorted_neither_advantage" + test_name + ".csv")
+    return
 
 
 if __name__ == "__main__":
-    test = "60sec640tests2"
-    analyzeFairness(jsonToDataFrame(test), test)
+    test = "60sec640tests"
+    # jsonToDataFrame(test)
+    # analyzeFairness(jsonToDataFrame(test), test)
+    analyzeFairness(avgThreeResults(test), "mean" + test)

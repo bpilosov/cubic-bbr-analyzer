@@ -49,6 +49,7 @@ def runIperf(i_bw, i_rtt, i_buffer, i_algo, i_num_stream, i_port):
     ssh.connect("f1", username="root")
     ftp_client = ssh.open_sftp()
 
+    # CHANGE ME TO DIRECTORY ON HOST AND CLIENT
     test_name = "60sec640tests2/bw{0}_rtt{1}_buffer{2}_{3}.json".format(i_bw, i_rtt, i_buffer, i_algo)
     try:
         ftp_client.remove(test_name)  # remove previous results if present
