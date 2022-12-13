@@ -120,7 +120,8 @@ def analyzeFairness(df: pd.DataFrame, test_name: str):
     # df_sorted = df.sort_values(by=['bbr_ratio', 'cubic_ratio'], ascending=[False, False])
     bbr_advantage = df.query("bbr_ratio >= 0.6")
     cubic_advantage = df.query("cubic_ratio >= 0.6")
-    neither_advantage = df.query("cubic_ratio < 0.6 | bbr_ratio < 0.6")
+    neither_advantage = df.query("(cubic_ratio < 0.6 & cubic_ratio > 0.4)"
+                                 "| bbr_ratio < 0.6 & bbr_ratio > 0.6")
     sorted_bbr_advantage = bbr_advantage.sort_values(by=["bbr_ratio"], ascending=False)
     sorted_cubic_advantage = cubic_advantage.sort_values(by=["cubic_ratio"], ascending=False)
     sorted_neither_advantage = neither_advantage.sort_values(by=["bbr_ratio"], ascending=False)
